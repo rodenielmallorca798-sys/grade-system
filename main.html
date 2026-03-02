@@ -35,9 +35,6 @@
                 radial-gradient(ellipse 60% 40% at 90% 100%, rgba(86,200,255,0.06) 0%, transparent 60%);
         }
 
-        /* ══════════════════════════════════════
-           HEADER
-        ══════════════════════════════════════ */
         header {
             padding: 14px 16px;
             border-bottom: 1px solid var(--border);
@@ -76,9 +73,6 @@
             header .sub { font-size: 12px; }
         }
 
-        /* ══════════════════════════════════════
-           CONTAINER
-        ══════════════════════════════════════ */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -87,9 +81,6 @@
         @media (min-width: 600px)  { .container { padding: 20px 18px; } }
         @media (min-width: 1000px) { .container { padding: 28px 28px; } }
 
-        /* ══════════════════════════════════════
-           SUBJECT CHIPS
-        ══════════════════════════════════════ */
         .chips {
             display: flex; gap: 6px; flex-wrap: wrap;
             margin-bottom: 14px;
@@ -106,9 +97,6 @@
         .c4{border-color:var(--accent4);color:var(--accent4)}.c4 .dot{background:var(--accent4)}
         .c5{border-color:var(--accent5);color:var(--accent5)}.c5 .dot{background:var(--accent5)}
 
-        /* ══════════════════════════════════════
-           MAIN LAYOUT GRID
-        ══════════════════════════════════════ */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr;   /* mobile: single column */
@@ -122,9 +110,6 @@
         .left-col { display: flex; flex-direction: column; gap: 14px; }
         @media (min-width: 900px) { .left-col { gap: 18px; } }
 
-        /* ══════════════════════════════════════
-           CARDS
-        ══════════════════════════════════════ */
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -143,9 +128,6 @@
             margin-bottom: 14px;
         }
 
-        /* ══════════════════════════════════════
-           FORM ELEMENTS
-        ══════════════════════════════════════ */
         .form-group { margin-bottom: 11px; }
 
         label {
@@ -228,9 +210,6 @@
         .btn-submit:active { transform: scale(0.98); }
         .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* ══════════════════════════════════════
-           ALERTS
-        ══════════════════════════════════════ */
         .alert {
             padding: 10px 13px; border-radius: 8px;
             font-size: 11px; margin-bottom: 14px;
@@ -242,9 +221,7 @@
         .alert ul { padding-left: 16px; margin-top: 5px; }
         .alert ul li { margin-bottom: 3px; }
 
-        /* ══════════════════════════════════════
-           GRADING SCALE TABLE
-        ══════════════════════════════════════ */
+
         .scale-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         .scale-table th {
             font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
@@ -254,9 +231,6 @@
         .scale-table td { padding: 7px 8px; border-bottom: 1px solid rgba(37,41,50,0.6); }
         .scale-table .gp { font-family: 'Syne', sans-serif; font-weight: 700; }
 
-        /* ══════════════════════════════════════
-           RECORDS TABLE
-        ══════════════════════════════════════ */
         .table-wrapper {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -324,9 +298,6 @@
         .loading { text-align: center; padding: 36px; color: var(--muted); font-size: 11px; animation: pulse 1.5s ease-in-out infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-        /* ══════════════════════════════════════
-           FOOTER
-        ══════════════════════════════════════ */
         footer {
             text-align: center; padding: 16px;
             color: var(--muted); font-size: 9px;
@@ -338,9 +309,9 @@
 
 <header>
     <div>
-        <h1>BSIT 3B &mdash; Grade System</h1>
+        <h1>Rodeniel Mallorca  BSIT 3B &mdash; Grade System</h1>
     </div>
-    <div class="firebase-badge"><span class="fb-dot"></span>Firebase Firestore</div>
+    <div class="firebase-badge"><span class="fb-dot"></span>Powered By : Github|Vercel|Firebase Firestore</div>
     <span class="sub">1.0–5.0 &nbsp;|&nbsp; Passing: 3.0</span>
 </header>
 
@@ -464,9 +435,8 @@
     </div><!-- /main-grid -->
 </div><!-- /container -->
 
-<footer>BSIT 3B &mdash; Grade System &copy; <span id="yr"></span> &mdash; Firebase Firestore</footer>
+<footer>BSIT 3B &mdash; Grade System &copy; <span id="yr"></span> &mdash; Powered By : Github|Vercel|Firebase Firestore</footer>
 
-<!-- ═══════════════════════ FIREBASE SDK v11 ═══════════════════════ -->
 <script type="module">
     import { initializeApp }
         from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -521,7 +491,6 @@
             `<tr><td colspan="10" class="no-data" style="color:var(--accent3)">Firebase error: ${err.message}</td></tr>`;
     });
 
-    /* ── SAVE STUDENT ───────────────────────────────────────────── */
     window.saveStudent = async function () {
         clearAlert();
         const errors = [];
@@ -573,14 +542,12 @@
         }
     };
 
-    /* ── DELETE STUDENT ─────────────────────────────────────────── */
     window.deleteStudent = async function (id) {
         if (!confirm("Delete this record?")) return;
         try { await deleteDoc(doc(db, "students", id)); }
         catch(e) { showAlert("error", [e.message]); }
     };
 
-    /* ── HELPERS ────────────────────────────────────────────────── */
     function getRemarkInfo(val) {
         if (val <= 1.25) return { text:"Excellent",    cls:"b-excellent",    color:"#5bffa0" };
         if (val <= 1.75) return { text:"Very Good",    cls:"b-verygood",     color:"#a3f76b" };
