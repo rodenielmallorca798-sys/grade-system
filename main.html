@@ -320,11 +320,11 @@
     <div id="alertBox"></div>
 
     <div class="chips">
-        <div class="chip c1"><span class="dot"></span>SIA 302</div>
-        <div class="chip c2"><span class="dot"></span>IT ELEC 3</div>
-        <div class="chip c3"><span class="dot"></span>IT ELEC 4</div>
-        <div class="chip c4"><span class="dot"></span>IAS 302</div>
-        <div class="chip c5"><span class="dot"></span>CAP 1</div>
+        <div class="chip c1"><span class="dot"></span>Assignment</div>
+        <div class="chip c2"><span class="dot"></span>Quiz</div>
+        <div class="chip c3"><span class="dot"></span>Laboratory Practical</div>
+        <div class="chip c4"><span class="dot"></span>Exam</div>
+        <div class="chip c5"><span class="dot"></span>Behavior</div>
     </div>
 
     <div class="main-grid">
@@ -342,41 +342,41 @@
                 <div class="divider"></div>
                 <p class="hint">Enter grade with <strong>one decimal only</strong> — e.g. <strong>1.3</strong>, <strong>2.0</strong>, <strong>5.0</strong></p>
 
-                <!-- SIA 302 -->
+                <!-- Assignment -->
                 <div class="form-group">
-                    <label><span class="ldot" style="background:var(--accent1)"></span>SIA 302</label>
+                    <label><span class="ldot" style="background:var(--accent1)"></span>Assignment</label>
                     <div class="input-row">
                         <input type="text" class="grade-input" id="inp1" placeholder="e.g. 1.5" maxlength="3" inputmode="decimal" autocomplete="off" oninput="updatePreview('inp1','prev1')">
                         <span class="grade-preview" id="prev1">—</span>
                     </div>
                 </div>
-                <!-- IT ELEC 3 -->
+                <!-- Quiz -->
                 <div class="form-group">
-                    <label><span class="ldot" style="background:var(--accent2)"></span>IT ELEC 3</label>
+                    <label><span class="ldot" style="background:var(--accent2)"></span>Quiz</label>
                     <div class="input-row">
                         <input type="text" class="grade-input" id="inp2" placeholder="e.g. 1.5" maxlength="3" inputmode="decimal" autocomplete="off" oninput="updatePreview('inp2','prev2')">
                         <span class="grade-preview" id="prev2">—</span>
                     </div>
                 </div>
-                <!-- IT ELEC 4 -->
+                <!-- Laboratory Practical -->
                 <div class="form-group">
-                    <label><span class="ldot" style="background:var(--accent3)"></span>IT ELEC 4</label>
+                    <label><span class="ldot" style="background:var(--accent3)"></span>Laboratory Practical</label>
                     <div class="input-row">
                         <input type="text" class="grade-input" id="inp3" placeholder="e.g. 1.5" maxlength="3" inputmode="decimal" autocomplete="off" oninput="updatePreview('inp3','prev3')">
                         <span class="grade-preview" id="prev3">—</span>
                     </div>
                 </div>
-                <!-- IAS 302 -->
+                <!-- Exam -->
                 <div class="form-group">
-                    <label><span class="ldot" style="background:var(--accent4)"></span>IAS 302</label>
+                    <label><span class="ldot" style="background:var(--accent4)"></span>Exam</label>
                     <div class="input-row">
                         <input type="text" class="grade-input" id="inp4" placeholder="e.g. 1.5" maxlength="3" inputmode="decimal" autocomplete="off" oninput="updatePreview('inp4','prev4')">
                         <span class="grade-preview" id="prev4">—</span>
                     </div>
                 </div>
-                <!-- CAP 1 -->
+                <!-- Behavior -->
                 <div class="form-group">
-                    <label><span class="ldot" style="background:var(--accent5)"></span>CAP 1</label>
+                    <label><span class="ldot" style="background:var(--accent5)"></span>Behavior</label>
                     <div class="input-row">
                         <input type="text" class="grade-input" id="inp5" placeholder="e.g. 1.5" maxlength="3" inputmode="decimal" autocomplete="off" oninput="updatePreview('inp5','prev5')">
                         <span class="grade-preview" id="prev5">—</span>
@@ -415,11 +415,11 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th style="color:var(--accent1)">SIA</th>
-                            <th style="color:var(--accent2)">ELEC3</th>
-                            <th style="color:var(--accent3)">ELEC4</th>
-                            <th style="color:var(--accent4)">IAS</th>
-                            <th style="color:var(--accent5)">CAP1</th>
+                            <th style="color:var(--accent1)">Assignment</th>
+                            <th style="color:var(--accent2)">Quiz</th>
+                            <th style="color:var(--accent3)">Laboratory Practical</th>
+                            <th style="color:var(--accent4)">Exam</th>
+                            <th style="color:var(--accent5)">Behavior</th>
                             <th>GWA</th>
                             <th>Remarks</th>
                             <th></th>
@@ -498,7 +498,7 @@
         if (!name) errors.push("Student name is required.");
 
         const subjects = ["inp1","inp2","inp3","inp4","inp5"];
-        const labels   = ["SIA 302","IT ELEC 3","IT ELEC 4","IAS 302","CAP 1"];
+        const labels   = ["Assignment","Quiz","Laboratory Practical","Exam","Behavior"];
         const grades   = {};
 
         subjects.forEach((id, i) => {
