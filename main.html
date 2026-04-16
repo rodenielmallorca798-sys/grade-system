@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>BSIT 3B — Grade System</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0f14;
+            --surface: #161920;
+            --border: #252932;
+            --accent1: #5bffa0;
+            --accent2: #ffce3b;
+            --accent3: #ff6b6b;
+            --accent4: #56c8ff;
+            --accent5: #d98aff;
+            --text: #e8ecf0;
+            --muted: #6b7280;
+            --radius: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(ellipse 80% 50% at 10% 0%, rgba(91, 255, 160, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 90% 100%, rgba(86, 200, 255, 0.06) 0%, transparent 60%);
+        }
+
+        header {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(15px, 4.5vw, 26px);
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .firebase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 9px;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 150, 50, 0.4);
+            color: #ff9632;
+            background: rgba(255, 150, 50, 0.06);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .firebase-badge .fb-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #ff9632;
+            animation: blink 1.5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.2
+            }
+        }
+
+        header .sub {
+            color: var(--muted);
+            font-size: 10px;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 380px) {
+            header .sub {
+                display: none;
+            }
+        }
+
+        @media (min-width: 600px) {
+            header {
+                padding: 20px 28px;
+                gap: 12px;
+            }
+
+            header h1 {
+                font-size: clamp(20px, 4vw, 28px);
+            }
+
+            .firebase-badge {
+                font-size: 10px;
+                padding: 3px 10px;
+            }
+
+            header .sub {
+                font-size: 12px;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 12px;
+        }
+
+        @media (min-width: 600px) {
+            .container {
+                padding: 20px 18px;
+            }
+        }
+
+        @media (min-width: 1000px) {
+            .container {
+                padding: 28px 28px;
+            }
+        }
+
+        .chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .chip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .c1 {
+            border-color: var(--accent1);
+            color: var(--accent1)
+        }
+
+        .c1 .dot {
+            background: var(--accent1)
+        }
+
+        .c2 {
+            border-color: var(--accent2);
+            color: var(--accent2)
+        }
+
+        .c2 .dot {
+            background: var(--accent2)
+        }
+
+        .c3 {
+            border-color: var(--accent3);
+            color: var(--accent3)
+        }
+
+        .c3 .dot {
+            background: var(--accent3)
+        }
+
+        .c4 {
+            border-color: var(--accent4);
+            color: var(--accent4)
+        }
+
+        .c4 .dot {
+            background: var(--accent4)
+        }
+
+        .c5 {
+            border-color: var(--accent5);
+            color: var(--accent5)
+        }
+
+        .c5 .dot {
+            background: var(--accent5)
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            /* mobile: single column */
+            gap: 14px;
+            align-items: start;
+        }
+
+        @media (min-width: 900px) {
+            .main-grid {
+                grid-template-columns: 300px 1fr;
+                gap: 18px;
+            }
+        }
+
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        @media (min-width: 900px) {
+            .left-col {
+                gap: 18px;
+            }
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px;
+            width: 100%;
+            overflow: hidden;
+            /* prevent any child overflow */
+        }
+
+        @media (min-width: 600px) {
+            .card {
+                padding: 18px;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .card {
+                padding: 22px;
+            }
+        }
+
+        .card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 11px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+
+        label .ldot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Grade input row: input + preview side by side on ≥480px,
+           stacked on smaller phones */
+        .input-row {
+            display: flex;
+            align-items: stretch;
+            gap: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 10px 12px;
+            font-family: 'DM Mono', monospace;
+            font-size: 14px;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+            min-width: 0;
+            /* allow shrinking */
+        }
+
+        input[type="text"].grade-input {
+            flex: 1;
+            width: auto;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent1);
+            box-shadow: 0 0 0 3px rgba(91, 255, 160, 0.1);
+        }
+
+        input[type="text"].input-valid {
+            border-color: var(--accent1) !important;
+            box-shadow: 0 0 0 3px rgba(91, 255, 160, 0.1) !important;
+        }
+
+        input[type="text"].input-invalid {
+            border-color: var(--accent3) !important;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.12) !important;
+        }
+
+        /* Preview badge — sits beside input on normal screens,
+           becomes a small inline tag on tiny screens */
+        .grade-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 80px;
+            font-family: 'Syne', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 6px 4px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            transition: all 0.2s;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        /* On very small phones: shrink preview or hide label */
+        @media (max-width: 360px) {
+            .grade-preview {
+                width: 60px;
+                font-size: 9px;
+                padding: 6px 2px;
+            }
+        }
+
+        .hint {
+            font-size: 10px;
+            color: var(--muted);
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        .hint strong {
+            color: var(--accent2);
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 12px 0;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--accent1);
+            color: #0d0f14;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Syne', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.88;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 10px 13px;
+            border-radius: 8px;
+            font-size: 11px;
+            margin-bottom: 14px;
+            border: 1px solid;
+            line-height: 1.7;
+        }
+
+        .alert-success {
+            background: rgba(91, 255, 160, 0.08);
+            border-color: var(--accent1);
+            color: var(--accent1);
+        }
+
+        .alert-error,
+        .alert-validation {
+            background: rgba(255, 107, 107, 0.08);
+            border-color: var(--accent3);
+            color: var(--accent3);
+        }
+
+        .alert ul {
+            padding-left: 16px;
+            margin-top: 5px;
+        }
+
+        .alert ul li {
+            margin-bottom: 3px;
+        }
+
+
+        .scale-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .scale-table th {
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 6px 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scale-table td {
+            padding: 7px 8px;
+            border-bottom: 1px solid rgba(37, 41, 50, 0.6);
+        }
+
+        .scale-table .gp {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            /* subtle gradient fade on right to hint at scroll */
+            background:
+                linear-gradient(to right, var(--surface) 0%, transparent 30px) left / 30px 100% no-repeat,
+                linear-gradient(to left, var(--surface) 0%, transparent 30px) right / 30px 100% no-repeat;
+            background-attachment: local, local;
+        }
+
+        .scroll-hint {
+            font-size: 9px;
+            color: var(--muted);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            display: none;
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+            .scroll-hint {
+                display: block;
+            }
+        }
+
+        table.records {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            min-width: 580px;
+        }
+
+        table.records thead tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        table.records th {
+            padding: 8px 10px;
+            text-align: center;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        table.records th:nth-child(2),
+        table.records td:nth-child(2) {
+            text-align: left;
+        }
+
+        table.records td {
+            padding: 10px 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .name-cell {
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: normal;
+            min-width: 90px;
+        }
+
+        .gp-cell {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 50px;
+            font-size: 9px;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .b-excellent {
+            background: rgba(91, 255, 160, 0.15);
+            color: var(--accent1);
+        }
+
+        .b-verygood {
+            background: rgba(163, 247, 107, 0.15);
+            color: #a3f76b;
+        }
+
+        .b-good {
+            background: rgba(232, 232, 74, 0.15);
+            color: #e8e84a;
+        }
+
+        .b-satisfactory {
+            background: rgba(255, 206, 59, 0.15);
+            color: var(--accent2);
+        }
+
+        .b-passing {
+            background: rgba(255, 140, 26, 0.15);
+            color: #ff8c1a;
+        }
+
+        .b-failed {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--accent3);
+        }
+
+        .btn-delete {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            padding: 3px 7px;
+            border-radius: 6px;
+            font-size: 9px;
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            transition: color 0.2s, border-color 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-delete:hover {
+            color: var(--accent3);
+            border-color: var(--accent3);
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 36px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 36px;
+            color: var(--muted);
+            font-size: 11px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.4
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            color: var(--muted);
+            font-size: 9px;
+            letter-spacing: 1px;
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1>Rodeniel Mallorca HighSchool &mdash; Grade System</h1>
+        </div>
+        <div class="firebase-badge"><span class="fb-dot"></span>Powered By : Github|Vercel|Firebase Firestore</div>
+        <span class="sub">100-75 &nbsp;|&nbsp; Passing: 75</span>
+    </header>
+
+    <div class="container">
+
+        <div id="alertBox"></div>
+
+        <div class="chips">
+            <div class="chip c1"><span class="dot"></span>Assignment</div>
+            <div class="chip c2"><span class="dot"></span>Quiz</div>
+            <div class="chip c3"><span class="dot"></span>Laboratory Practical</div>
+            <div class="chip c4"><span class="dot"></span>Exam</div>
+            <div class="chip c5"><span class="dot"></span>Behavior</div>
+        </div>
+
+        <div class="main-grid">
+            <div class="left-col">
+
+                <!-- ── ADD STUDENT FORM ── -->
+                <div class="card">
+                    <div class="card-title">Add Student Record</div>
+
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input type="text" id="inputName" placeholder="Full name" autocomplete="off">
+                    </div>
+
+                    <div class="divider"></div>
+                    <p class="hint">Enter grade with <strong>one decimal only</strong> — e.g. <strong>95</strong>,
+                        <strong>90</strong>, <strong>75</strong>
+                    </p>
+
+                    <!-- Assignment -->
+                    <div class="form-group">
+                        <label><span class="ldot" style="background:var(--accent1)"></span>Assignment</label>
+                        <div class="input-row">
+                            <input type="text" class="grade-input" id="inp1" placeholder="e.g. 90" maxlength="3"
+                                autocomplete="off" oninput="updatePreview('inp1','prev1')">
+                            <span class="grade-preview" id="prev1">—</span>
+                        </div>
+                    </div>
+                    <!-- Quiz -->
+                    <div class="form-group">
+                        <label><span class="ldot" style="background:var(--accent2)"></span>Quiz</label>
+                        <div class="input-row">
+                            <input type="text" class="grade-input" id="inp2" placeholder="e.g. 90" maxlength="3"
+                                inputmode="decimal" autocomplete="off" oninput="updatePreview('inp2','prev2')">
+                            <span class="grade-preview" id="prev2">—</span>
+                        </div>
+                    </div>
+                    <!-- Laboratory Practical -->
+                    <div class="form-group">
+                        <label><span class="ldot" style="background:var(--accent3)"></span>Laboratory Practical</label>
+                        <div class="input-row">
+                            <input type="text" class="grade-input" id="inp3" placeholder="e.g. 90" maxlength="3"
+                                inputmode="decimal" autocomplete="off" oninput="updatePreview('inp3','prev3')">
+                            <span class="grade-preview" id="prev3">—</span>
+                        </div>
+                    </div>
+                    <!-- Exam -->
+                    <div class="form-group">
+                        <label><span class="ldot" style="background:var(--accent4)"></span>Exam</label>
+                        <div class="input-row">
+                            <input type="text" class="grade-input" id="inp4" placeholder="e.g. 90" maxlength="3"
+                                inputmode="decimal" autocomplete="off" oninput="updatePreview('inp4','prev4')">
+                            <span class="grade-preview" id="prev4">—</span>
+                        </div>
+                    </div>
+                    <!-- Behavior -->
+                    <div class="form-group">
+                        <label><span class="ldot" style="background:var(--accent5)"></span>Behavior</label>
+                        <div class="input-row">
+                            <input type="text" class="grade-input" id="inp5" placeholder="e.g. 90" maxlength="3"
+                                inputmode="decimal" autocomplete="off" oninput="updatePreview('inp5','prev5')">
+                            <span class="grade-preview" id="prev5">—</span>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+                    <button class="btn-submit" id="saveBtn" onclick="saveStudent()">Save Record</button>
+                </div>
+
+                <!-- ── GRADING SCALE ── -->
+                <div class="card">
+                    <div class="card-title">Grading Scale</div>
+                    <table class="scale-table">
+                        <thead>
+                            <tr>
+                                <th>Grade Range</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="gp">98 – 100</td>
+                                <td>Outstanding</td>
+                            </tr>
+                            <tr>
+                                <td class="gp">95 – 97</td>
+                                <td>Very Satisfactory</td>
+                            </tr>
+                            <tr>
+                                <td class="gp">90 – 94</td>
+                                <td>Satisfactory</td>
+                            </tr>
+                            <tr>
+                                <td class="gp">85 – 89</td>
+                                <td>Fairly Satisfactory</td>
+                            </tr>
+                            <tr>
+                                <td class="gp">75 – 84</td>
+                                <td>Passing</td>
+                            </tr>
+                            <tr>
+                                <td class="gp">Below 75</td>
+                                <td>Failed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div><!-- /left-col -->
+
+            <!-- ── STUDENT RECORDS ── -->
+            <div class="card">
+                <div class="card-title">Student Records</div>
+                <p class="scroll-hint">← swipe to see all columns →</p>
+                <div class="table-wrapper">
+                    <table class="records">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th style="color:var(--accent1)">Assignment</th>
+                                <th style="color:var(--accent2)">Quiz</th>
+                                <th style="color:var(--accent3)">Laboratory Practical</th>
+                                <th style="color:var(--accent4)">Exam</th>
+                                <th style="color:var(--accent5)">Behavior</th>
+                                <th>GWA</th>
+                                <th>Remarks</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsBody">
+                            <tr>
+                                <td colspan="10" class="loading">Connecting to Firebase...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div><!-- /main-grid -->
+    </div><!-- /container -->
+
+    <footer>BSIT 3B &mdash; Grade System &copy; <span id="yr"></span> &mdash; Powered By : Github|Vercel|Firebase
+        Firestore</footer>
+
+    <script type="module">
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import {
+            getFirestore, collection, addDoc, deleteDoc, doc,
+            onSnapshot, query, orderBy, serverTimestamp
+        }
+            from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUwB9HXSVPTr2UkMNEUklW66rlHwOZpnc",
+            authDomain: "rodeniel-mallorca.firebaseapp.com",
+            projectId: "rodeniel-mallorca",
+            storageBucket: "rodeniel-mallorca.firebasestorage.app",
+            messagingSenderId: "850154719217",
+            appId: "1:850154719217:web:d4b7c80d3cbc6f8b84e650"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const col = collection(db, "students");
+
+        /* ================= VALIDATION ================= */
+        function isValidGrade(str) {
+            const num = parseInt(str);
+            return !isNaN(num) && num >= 75 && num <= 100;
+        }
+
+        /* ================= REALTIME ================= */
+        const q = query(col, orderBy("createdAt", "desc"));
+
+        onSnapshot(q, (snapshot) => {
+            const tbody = document.getElementById("recordsBody");
+
+            if (snapshot.empty) {
+                tbody.innerHTML = `<tr><td colspan="10" class="no-data">No records yet.</td></tr>`;
+                return;
+            }
+
+            let html = ""; let count = 1;
+
+            snapshot.forEach(docSnap => {
+                const d = docSnap.data();
+                const avg = parseFloat(d.average);
+
+                const info = getRemarkInfo(avg);
+
+                html += `
+        <tr>
+            <td>${count++}</td>
+            <td class="name-cell">${d.name}</td>
+            <td>${d.subject1}</td>
+            <td>${d.subject2}</td>
+            <td>${d.subject3}</td>
+            <td>${d.subject4}</td>
+            <td>${d.subject5}</td>
+            <td><span class="gp-cell">${avg.toFixed(2)}</span></td>
+            <td><span class="badge ${info.cls}">${info.text}</span></td>
+            <td><button onclick="deleteStudent('${docSnap.id}')">del</button></td>
+        </tr>`;
+            });
+
+            tbody.innerHTML = html;
+        });
+
+        /* ================= SAVE ================= */
+        window.saveStudent = async function () {
+
+            const name = document.getElementById("inputName").value.trim();
+
+            const g1 = document.getElementById("inp1").value;
+            const g2 = document.getElementById("inp2").value;
+            const g3 = document.getElementById("inp3").value;
+            const g4 = document.getElementById("inp4").value;
+            const g5 = document.getElementById("inp5").value;
+
+            if (!name || !g1 || !g2 || !g3 || !g4 || !g5) {
+                alert("Complete all fields");
+                return;
+            }
+
+            if (![g1, g2, g3, g4, g5].every(isValidGrade)) {
+                alert("Grades must be 75–100 only");
+                return;
+            }
+
+            const grades = {
+                subject1: parseInt(g1),
+                subject2: parseInt(g2),
+                subject3: parseInt(g3),
+                subject4: parseInt(g4),
+                subject5: parseInt(g5)
+            };
+
+            /* ===== WEIGHTED COMPUTATION ===== */
+            const avg =
+                (grades.subject1 * 0.10) +
+                (grades.subject2 * 0.20) +
+                (grades.subject3 * 0.30) +
+                (grades.subject4 * 0.30) +
+                (grades.subject5 * 0.10);
+
+            await addDoc(col, {
+                name,
+                ...grades,
+                average: avg,
+                createdAt: serverTimestamp()
+            });
+
+            alert("Saved!");
+            location.reload();
+        };
+
+        /* ================= DELETE ================= */
+        window.deleteStudent = async function (id) {
+            await deleteDoc(doc(db, "students", id));
+        };
+
+        /* ================= REMARKS ================= */
+        function getRemarkInfo(val) {
+            if (val >= 98) return { text: "Outstanding", cls: "b-excellent" };
+            if (val >= 95) return { text: "Very Satisfactory", cls: "b-verygood" };
+            if (val >= 90) return { text: "Satisfactory", cls: "b-good" };
+            if (val >= 85) return { text: "Fairly Satisfactory", cls: "b-satisfactory" };
+            if (val >= 75) return { text: "Passing", cls: "b-passing" };
+            return { text: "Failed", cls: "b-failed" };
+        }
+
+        /* ================= PREVIEW ================= */
+        window.updatePreview = function (inputId, previewId) {
+            const val = document.getElementById(inputId).value;
+            const preview = document.getElementById(previewId);
+
+            if (!isValidGrade(val)) {
+                preview.textContent = "✗";
+                return;
+            }
+
+            const info = getRemarkInfo(parseInt(val));
+            preview.textContent = info.text;
+        };
+
+    </script>
+
+</body>
+
+</html>
